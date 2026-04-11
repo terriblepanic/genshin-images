@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct InfoView: View {
+    var titleOn: Bool
+    var regionColor: Color
+
     var body: some View {
         NavigationView {
             List(posts) { post in
@@ -15,7 +18,8 @@ struct InfoView: View {
                     InfoRow(post: post)
                 }
             }
-            .navigationTitle("Персонажи Геншин")
+            .navigationTitle(titleOn ? "Персонажи Геншин" : "")
         }
+        .tint(regionColor)
     }
 }
