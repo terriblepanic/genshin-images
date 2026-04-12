@@ -11,11 +11,10 @@ struct SettingsView: View {
     @Environment(\.colorScheme) var colorScheme
 
     @Binding var titleOn: Bool
-    @Binding var selectedRegion: String
+    @Binding var selectedRegion: Region
     var regionColor: Color
 
-    let regions = ["Мондштадт", "Ли Юэ", "Инадзума", "Сумеру", "Фонтейн", "Натлан", "Нодкрай"]
-
+    // fontSize нигде не сохраняется — сбросится при перезапуске, это нужно только для превью
     @State private var fontSize: Double = 16
 
     var body: some View {
@@ -26,26 +25,31 @@ struct SettingsView: View {
                         .foregroundColor(regionColor)
 
                     Picker("Любимый регион", selection: $selectedRegion) {
-                        ForEach(regions, id: \.self) { region in
-                            Text(region)
+                        ForEach(Region.allCases) { region in
+                            Text(region.localizedName).tag(region)
                         }
                     }
                 }
 
                 Section(header: Text("Навигация")) {
-                    Toggle("Navigation title enabled", isOn: $titleOn)
+                    Toggle("Показывать заголовок страниц", isOn: $titleOn)
 
                     if titleOn {
-                        Text("Navigation title enabled")
+                        Text("Заголовок: «Персонажи Геншин»")
+                            .foregroundColor(.secondary)
+                            .font(.caption)
                     }
                 }
 
                 Section(header: Text("Внешний вид")) {
                     Text("Размер текста: \(Int(fontSize))")
                     Slider(value: $fontSize, in: 12...24, step: 1)
+                    Text("Так будет выглядеть текст в приложении")
+                        .font(.system(size: fontSize))
+                        .foregroundColor(.secondary)
                 }
             }
-            .navigationTitle("Настройки")
+            .navigationTitle(titleOn ? "Настройки" : "")
         }
     }
 }
