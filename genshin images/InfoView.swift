@@ -10,11 +10,14 @@ import SwiftUI
 struct InfoView: View {
     var titleOn: Bool
     var regionColor: Color
+    var onPostViewed: (Post) -> Void
 
     var body: some View {
         NavigationView {
             List(posts) { post in
-                NavigationLink(destination: InfoDetails(post: post)) {
+                NavigationLink(destination: InfoDetails(post: post)
+                    .onAppear { onPostViewed(post) }
+                ) {
                     InfoRow(post: post)
                 }
             }
